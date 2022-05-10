@@ -16,6 +16,9 @@ public class Graph<T> {
 	}
 
 	public void BFS(Vertex<T> s) {
+		Queue<Vertex<T>> q = new LinkedList<>();
+		ArrayList<Vertex<T>> g = vertices;
+		g.remove(s);
 		for (Vertex<T> u : vertices) {
 			u.setColor(Color.WHITE);
 			u.setDistance(Integer.MAX_VALUE);
@@ -24,7 +27,6 @@ public class Graph<T> {
 		s.setColor(Color.GRAY);
 		s.setDistance(0);
 		s.setFather(null);
-		Queue<Vertex<T>> q = new LinkedList<>();
 		q.add(s);
 		while (!q.isEmpty()) {
 			Vertex<T> u = q.remove();
@@ -33,7 +35,7 @@ public class Graph<T> {
 					v.setColor(Color.GRAY);
 					v.setDistance(u.getDistance() + 1);
 					v.setFather(u);
-					q.remove(v);
+					q.add(v);
 				}
 			}
 			u.setColor(Color.BLACK);
@@ -103,6 +105,15 @@ public class Graph<T> {
 	public void printColors(){
 		for(Vertex<T> v : vertices) {
 			System.out.println(v.getColor());
+		}
+	}
+	
+	public void printAdjacentVertex() {
+		for(Vertex<T> v : vertices) {
+			System.out.println("Adjacency list of " + v.getValue());
+			for(Vertex <T> u : v.getAdjacencyList()) {
+				System.out.println(u.getValue());
+			}
 		}
 	}
 

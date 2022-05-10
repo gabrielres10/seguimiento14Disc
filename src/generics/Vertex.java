@@ -27,6 +27,7 @@ public class Vertex <T>{
 	public Vertex (T value) {
 		this.value = value;
 		this.adjacencyList = new ArrayList<>();
+		this.color = Color.WHITE;
 	}
 	
 	/**

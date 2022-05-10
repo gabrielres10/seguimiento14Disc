@@ -1,7 +1,9 @@
 package ui;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import generics.Edge;
 import generics.Graph;
 
 public class Main {
@@ -9,7 +11,7 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc =  new Scanner(System.in);
 		// TODO Auto-generated method stub
-		/*Graph<String> graph = new Graph<String>("U");
+		Graph<String> graph = new Graph<String>("U");
 		System.out.println(1);
 		graph.newEdge("U", "X");
 		System.out.println(2);
@@ -24,10 +26,10 @@ public class Main {
 		graph.newEdge("V", "U");
 		
 		ArrayList<Edge<String>> edges = graph.getEdges();
-		graph.printColors();
+		graph.printAdjacentVertex();
 		System.out.println("Edges quant: " + edges.size());
-		graph.iterativeDFS();
-		graph.printColors();*/
+		graph.BFS(graph.findVertex("Z"));
+		graph.printColors();/*
 		System.out.println("Ingrese el primer valor (String) de su grafo");
 		Graph<String> newGraph = new Graph<>(sc.next());
 		int ans = 0;
@@ -50,7 +52,7 @@ public class Main {
 				default:
 					ans = 0;
 			}
-		}while(ans != 0);
+		}while(ans != 0);*/
 	}
 
 }
