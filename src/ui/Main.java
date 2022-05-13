@@ -1,35 +1,39 @@
 package ui;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
-import generics.Edge;
 import generics.Graph;
 
 public class Main {
 
 	public static void main(String[] args) {
-		Scanner sc =  new Scanner(System.in);
 		// TODO Auto-generated method stub
-		Graph<String> graph = new Graph<String>("U");
-		System.out.println(1);
-		graph.newEdge("U", "X");
-		System.out.println(2);
-		graph.newEdge("X", "Y");
-		System.out.println(3);
-		graph.newEdge("Y", "Z");
-		System.out.println(4);
-		graph.newEdge("Z", "Y");
-		System.out.println(5);
-		graph.newEdge("Y", "V");
-		System.out.println(6);
-		graph.newEdge("V", "U");
+		Scanner sc =  new Scanner(System.in);
+/* Caso de prueba (Mismo del enunciado del seguimiento)
+			U
+			2
+			U
+			X
+			2
+			X
+			Y
+			2
+			Y
+			V
+			2
+			V
+			U
+			2
+			Y
+			Z
+			2
+			Z
+			Y
+			0
+
+*/
 		
-		ArrayList<Edge<String>> edges = graph.getEdges();
-		graph.printAdjacentVertex();
-		System.out.println("Edges quant: " + edges.size());
-		graph.BFS(graph.findVertex("Z"));
-		graph.printColors();/*
+		
 		System.out.println("Ingrese el primer valor (String) de su grafo");
 		Graph<String> newGraph = new Graph<>(sc.next());
 		int ans = 0;
@@ -52,7 +56,22 @@ public class Main {
 				default:
 					ans = 0;
 			}
-		}while(ans != 0);*/
+		}while(ans != 0);
+		
+		System.out.println("\n\n Por BFS: ");
+		if(newGraph.BFS(newGraph.getFirstValue())) {
+            System.out.println("---------Conexo--------");
+        }else {
+            System.out.println("---------No conexo--------");
+        }
+		
+		System.out.println(" Por DFS: ");
+		if(newGraph.DFS()) {
+            System.out.println("---------Conexo--------");
+        }else {
+            System.out.println("---------No conexo--------");
+        }
+
 	}
 
 }

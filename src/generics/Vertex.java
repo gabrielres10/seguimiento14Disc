@@ -2,7 +2,7 @@ package generics;
 
 import java.util.ArrayList;
 
-public class Vertex <T>{
+public class Vertex <T extends Comparable<T>> implements Comparable<Vertex<T>>{
 	private T value;
 	private ArrayList<Vertex<T>> adjacencyList;
 	private Color color;
@@ -26,8 +26,8 @@ public class Vertex <T>{
 
 	public Vertex (T value) {
 		this.value = value;
+		this.color = Color.BLACK;
 		this.adjacencyList = new ArrayList<>();
-		this.color = Color.WHITE;
 	}
 	
 	/**
@@ -101,6 +101,13 @@ public class Vertex <T>{
 	 */
 	public void setFinalTime(int finalTime) {
 		this.finalTime = finalTime;
+	}
+
+
+	@Override
+	public int compareTo(Vertex<T> other) {
+		int comp = this.getValue().compareTo(other.getValue());
+		return comp;
 	}
 	
 	

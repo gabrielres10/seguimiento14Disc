@@ -4,32 +4,38 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Graph<T> {
-	private ArrayList<Vertex<T>> vertices;
-	private ArrayList<Edge<T>> edges;
-	private int time;
+public class Graph<T extends Comparable<T>> {
+	private ArrayList<Vertex<T>> vertices;// Set of vertex that belong to Graph
+	private ArrayList<Edge<T>> edges;// Set of edges that belong to Graph
+	private int time; // Attribute time to do DFS algorithm
 
+	/**
+	 * Constructor from Graph Class
+	 * 
+	 * @param value, T, Value of the first node of the graph
+	 */
 	public Graph(T value) {
 		this.vertices = new ArrayList<>();
 		this.edges = new ArrayList<>();
-		this.vertices.add(new Vertex<T>(value));
+		addVertex(value);
 	}
 
-	public void BFS(Vertex<T> s) {
-		Queue<Vertex<T>> q = new LinkedList<>();
-		ArrayList<Vertex<T>> g = vertices;
-		g.remove(s);
+	
+	public boolean BFS(T sValue) {
+		int i = getIndexOf(sValue);
 		for (Vertex<T> u : vertices) {
 			u.setColor(Color.WHITE);
 			u.setDistance(Integer.MAX_VALUE);
 			u.setFather(null);
 		}
-		s.setColor(Color.GRAY);
-		s.setDistance(0);
-		s.setFather(null);
-		q.add(s);
+		vertices.get(i).setColor(Color.GRAY);
+		vertices.get(i).setDistance(0);
+		vertices.get(i).setFather(null);		
+		Queue<Vertex<T>> q = new LinkedList<>();
+		
+		q.add(vertices.get(i)); //Enqueue
 		while (!q.isEmpty()) {
-			Vertex<T> u = q.remove();
+			Vertex<T> u = q.remove(); //Dequeue
 			for (Vertex<T> v : u.getAdjacencyList()) {
 				if (v.getColor().equals(Color.WHITE)) {
 					v.setColor(Color.GRAY);
@@ -40,9 +46,33 @@ public class Graph<T> {
 			}
 			u.setColor(Color.BLACK);
 		}
+		for (Vertex<T> u : vertices) {
+			if (!u.getColor().equals(Color.BLACK)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * This method gets the index of the vertex that contains a value
+	 * @param sValue
+	 * @return
+	 */
+	private int getIndexOf(T sValue) {
+		// TODO Auto-generated method stub
+		int n = 0;
+		for(Vertex<T> v : vertices) {
+			if(v.getValue().equals(sValue)) {
+				break;
+			}
+			n++;
+		}
+		return n;
 	}
 
-	public void DFS() {
+	
+	public boolean DFS() {
 		for (Vertex<T> u : vertices) {
 			u.setColor(Color.WHITE);
 			u.setFather(null);
@@ -53,6 +83,16 @@ public class Graph<T> {
 				DFSVisit(u);
 			}
 		}
+
+		int c = 0;
+
+		for (Vertex<T> u : vertices) {
+			if (u.getFather() == null) {
+				c++;
+			}
+		}
+
+		return (c > 1) ? false : true;
 	}
 
 	private void DFSVisit(Vertex<T> u) {
@@ -71,47 +111,21 @@ public class Graph<T> {
 		u.setFinalTime(time);
 	}
 
-	public void iterativeDFS() {
 
-		for (Vertex<T> u : vertices) {
-			u.setColor(Color.WHITE);
-			u.setFather(null);
-		}
+	public void search(T value) {
 
-		time = 0;
-		for (Vertex<T> u : vertices) {
-			if (u.getColor().equals(Color.WHITE)) {
-				time++;
-				u.setDistance(time);
-				u.setColor(Color.GRAY);
-				for (Vertex<T> v : u.getAdjacencyList()) {
-					if (v.getColor() != null && v.getColor().equals(Color.WHITE)) {
-						v.setFather(u);
-						u = v;
-						break;
-					}
-				}
-				u.setColor(Color.BLACK);
-				time++;
-				u.setFinalTime(time);
-			}
-		}
 	}
-	
-	public void search(T value){
-		
-	}
-	
-	public void printColors(){
-		for(Vertex<T> v : vertices) {
+
+	public void printColors() {
+		for (Vertex<T> v : vertices) {
 			System.out.println(v.getColor());
 		}
 	}
-	
+
 	public void printAdjacentVertex() {
-		for(Vertex<T> v : vertices) {
+		for (Vertex<T> v : vertices) {
 			System.out.println("Adjacency list of " + v.getValue());
-			for(Vertex <T> u : v.getAdjacencyList()) {
+			for (Vertex<T> u : v.getAdjacencyList()) {
 				System.out.println(u.getValue());
 			}
 		}
@@ -152,13 +166,13 @@ public class Graph<T> {
 		if (existsVertex(a)) {
 			if (existsVertex(b)) {
 				if (!existsEdge(a, b)) {
-					updateAdjacencyList(a,b);
+					updateAdjacencyList(a, b);
 					a.getAdjacencyList().add(b);
 					edges.add(new Edge<T>(a, b));
 				}
 			} else {
 				edges.add(new Edge<T>(a, b));
-				updateAdjacencyList(a,b);
+				updateAdjacencyList(a, b);
 				a.getAdjacencyList().add(b);
 				vertices.add(b);
 			}
@@ -176,16 +190,25 @@ public class Graph<T> {
 	}
 	
 	/**
+	 * This is the value of the first vertex
+	 * @return
+	 */
+	public T getFirstValue() {
+		return vertices.get(0).getValue();
+	}
+
+	/**
 	 * This method checks if a vertex with a value exists
+	 * 
 	 * @param a, vertex to be checked
 	 * @return true, if the vertex exists, false otherwise
 	 */
 	public boolean existsVertex(Vertex<T> a) {
-		for(Vertex<T> v : vertices) {
-			if(v.getValue() != null)
-			if(v.getValue().equals(a.getValue())) {
-				return true;
-			}
+		for (Vertex<T> v : vertices) {
+			if (v.getValue() != null)
+				if (v.getValue().equals(a.getValue())) {
+					return true;
+				}
 		}
 		return false;
 	}
@@ -199,43 +222,46 @@ public class Graph<T> {
 	 */
 	public boolean existsEdge(Vertex<T> a, Vertex<T> b) {
 		for (Edge<T> e : edges) {
-			if (e.getInputVertex().getValue().equals(a.getValue()) && e.getOutputVertex().getValue().equals(b.getValue())) {
+			if (e.getInputVertex().getValue().equals(a.getValue())
+					&& e.getOutputVertex().getValue().equals(b.getValue())) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public void addVertex(T value) {
-		if(!existsVertex(new Vertex<T>(value))) {
+		if(findVertex(value)==null) {
 			this.vertices.add(new Vertex<T>(value));
 		}
 	}
-	
-	
+
 	public void updateAdjacencyList(Vertex<T> inputVertex, Vertex<T> outputVertex) {
-		for(Vertex<T> v : vertices) {
-			if(v.getValue().equals(inputVertex.getValue())) {
+		for (Vertex<T> v : vertices) {
+			if (v.getValue().equals(inputVertex.getValue())) {
 				v.getAdjacencyList().add(outputVertex);
 				return;
 			}
 		}
 	}
+
 	
 	/**
-	 * This method returns the exact vertex of the vertices array by searching its value
+	 * This method returns the exact vertex of the vertices array by searching its
+	 * value
+	 * 
 	 * @param value, this is the value of the vertex
-	 * @return (T) Vertex, this is the vertex 
+	 * @return (T) Vertex, this is the vertex
 	 */
-	public Vertex<T> findVertex(T value){
-		for(Vertex<T> v : vertices) {
-			if(v.getValue().equals(value)) {
+	public Vertex<T> findVertex(T value) {
+		for (Vertex<T> v : vertices) {
+			if (v.getValue().equals(value)) {
 				return v;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * This method gets an output vertex given the value of its input vertex
 	 * 
